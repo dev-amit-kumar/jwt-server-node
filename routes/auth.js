@@ -4,9 +4,11 @@ const router = require('express').Router();
 const userController = require('../controller/user');
 
 // validation middleware
-const validation = require('../validations/registerValidation');
+const registerValidation = require('../validations/registerValidation');
+const loginValidation = require('../validations/loginValidation');
 
 // to add new user
-router.post('/register', validation, userController.registerUser);
+router.post('/register', registerValidation, userController.registerUser);
+router.post('/login', loginValidation, userController.loginUser);
 
 module.exports = router;

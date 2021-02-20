@@ -1,15 +1,14 @@
 const Joi = require('joi');
 
-const registerValidation = (req, res, next) => {
+const loginValidation = (req, res, next) => {
 	const UserValidation = Joi.object({
-		name: Joi.string().min(6).required(),
 		email: Joi.string().min(6).required().email(),
 		password: Joi.string().min(6).required(),
 	});
 	const { error } = UserValidation.validate(req.body);
 	if (error) {
 		return res.status(400).json({
-			message: 'Register failed',
+			message: 'Login failed',
 			errorCode: 400,
 			error: error.details[0].message,
 		});
@@ -17,4 +16,4 @@ const registerValidation = (req, res, next) => {
 	next();
 };
 
-module.exports = registerValidation;
+module.exports = loginValidation;
