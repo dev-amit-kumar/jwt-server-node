@@ -10,5 +10,6 @@ const loginValidation = require('../validations/loginValidation');
 // to add new user
 router.post('/register', registerValidation, userController.registerUser);
 router.post('/login', loginValidation, userController.loginUser);
+router.get('/profile', userController.userProfile);
 
 module.exports = router;

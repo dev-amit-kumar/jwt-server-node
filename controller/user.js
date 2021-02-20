@@ -2,6 +2,7 @@ const userModel = require('../model/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const User = require('../model/User');
 
 exports.registerUser = async (req, res) => {
 	const user = new userModel({
@@ -26,7 +27,7 @@ exports.registerUser = async (req, res) => {
 	}
 };
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = (req, res) => {
 	userModel.findOne({ email: req.body.email }, (err, data) => {
 		if (err)
 			return res.status(500).json({
@@ -61,5 +62,26 @@ exports.loginUser = async (req, res) => {
 				token: token,
 			});
 		}
+	});
+};
+
+exports.userProfile = (req, res) => {
+	var token = req.headers['x-access-token'];
+	if (!token)
+		return res
+			.status(400)
+			.json({ message: 'Token not found', errorCode: 400 });
+	jwt.verify(token, config.secret, (err, data) => {
+		if (err)
+			return res
+				.status(500)
+				.json({ message: 'Server Error', errorCode: 500, error: err });
+		User.findById(data.id, { password: 0 }, (err, result) => {
+			res.json({
+				message: 'User found',
+				errorCode: 200,
+				data: result,
+			});
+		});
 	});
 };
